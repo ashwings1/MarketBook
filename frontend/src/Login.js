@@ -85,10 +85,10 @@ function LoginForm() {
                         required
                     />
                 </div>
-                <div className="form-group" style={{ margniBottom: '10px' }}>
+                <div className="form-group" style={{ marginBottom: '10px' }}>
                     <label htmlFor="password">Password: </label>
                     <input
-                        type="text"
+                        type="password"
                         id="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
