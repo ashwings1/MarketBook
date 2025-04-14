@@ -53,6 +53,7 @@ pipeline {
           dir('frontend') {
             sh 'npx serve -s build -l 3000 &' 
           }
+      }
     }
   }
 }
