@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { trackRequest } from './Metrics';
 
 function LoginForm() {
     const [username, setUsername] = useState('');
@@ -15,7 +16,7 @@ function LoginForm() {
         setIsLoading(true);
 
         try {
-            const response = await fetch('http://localhost:8080/login', {
+            const response = await fetch('http://localhost:8000/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -26,10 +27,15 @@ function LoginForm() {
             const data = await response.json();
 
             if (!response.ok) {
+                //Tracking failed login
+                trackRequest('POST', '/login/error');
                 throw new Error(data.message || 'Login failed');
             }
 
             if (data.success) {
+                //Tracking successful login
+                trackRequest('POST', '/login/success');
+
                 //Success message to user
                 setSuccess('Login successful!');
 
@@ -43,10 +49,14 @@ function LoginForm() {
                 //Redirect to dashboard or home page
                 //window.location.href = '/dashboard';
             } else {
+                //Tracking failed authentication
+                trackRequest('POST', '/login/error');
                 setError(data.message || 'Authentication failed');
             }
-        } catch (err) {
-            setError(err.message || 'Invalid username or password');
+        } catch (error) {
+            //Tracking general errors
+            trackRequest('POST', '/login/error');
+            setError(error.message || 'Invalid username or password');
             console.error('Login Error:', error);
         } finally {
             setIsLoading(false);

@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -52,7 +53,8 @@ public class SecurityConfiguration {
                     .csrf(AbstractHttpConfigurer::disable) 
                     .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                     .authorizeHttpRequests(authorize -> {
-                        authorize.requestMatchers("/createnewuser", "/login").permitAll();
+                        authorize.requestMatchers(HttpMethod.POST, "/track-metric").permitAll();
+                        authorize.requestMatchers("/createnewuser", "/login", "/actuator/**").permitAll();
 
                         authorize.anyRequest().authenticated();
                     })

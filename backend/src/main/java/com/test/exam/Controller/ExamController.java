@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Metrics;
+
 
 @RestController
 public class ExamController {
@@ -58,5 +61,12 @@ public class ExamController {
     @DeleteMapping("/product/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Integer id){
         return deleteProductService.execute(id);
+    }
+
+    Counter frontendClicks = Counter.builder("frontend_clicks").description("Total Frontend clicks").register(Metrics.globalRegistry);
+    //React frontend -> when user clicks button 
+    @PostMapping("/track-metric")
+    public void trackEvent(){
+        frontendClicks.increment();
     }
 }

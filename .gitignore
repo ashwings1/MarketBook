@@ -44,3 +44,7 @@ backend/.settings/
 backend/.project
 backend/.classpath
 backend/.idea/
+
+
+# Prometheus
+monitoring/prometheus/data/
