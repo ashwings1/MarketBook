@@ -61,7 +61,7 @@ public class SecurityConfiguration {
                     .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                     .authorizeHttpRequests(authorize -> {
                         authorize.requestMatchers(HttpMethod.POST, "/track-metric").permitAll();
-                        authorize.requestMatchers("/registeruser", "/login", "/logout", "/actuator/**").permitAll();
+                        authorize.requestMatchers("/register", "/login", "/logout", "/reset-password", "/actuator/**").permitAll();
 
                         authorize.anyRequest().authenticated();
                     })

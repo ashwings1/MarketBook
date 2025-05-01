@@ -16,10 +16,9 @@ public class CreateNewUserController {
         this.createNewUserService = createNewUserService;
     }
 
-    @PostMapping("/registeruser")
+    @PostMapping("/register")
     public ResponseEntity<String> createNewUser(@RequestBody CustomUser user){
         return createNewUserService.execute(user);
     }
 
-    
 }

@@ -1,22 +1,32 @@
 package com.test.exam.Security;
 
+import java.util.Optional;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.validation.Valid;
 
 
 @RestController
 public class AuthenticationController {
     
     private final AuthenticationManager authenticationManager;
+    private final CustomUserRepository customUserRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public AuthenticationController(AuthenticationManager authenticationManager){
+    public AuthenticationController(AuthenticationManager authenticationManager, CustomUserRepository customUserRepository, PasswordEncoder passwordEncoder){
         this.authenticationManager = authenticationManager;
+        this.customUserRepository = customUserRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/login")
@@ -37,6 +47,34 @@ public class AuthenticationController {
             return ResponseEntity.status(401).body(new LoginResponse("Invalid username or password", false));
         }
     }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<LoginResponse> resetPassword(@Valid @RequestBody ResetPassword request, BindingResult bindingResult){
+        try {
+            //Checking for validation errors
+            if (bindingResult.hasErrors()){
+                String errorMessage = bindingResult.getFieldError().getDefaultMessage();
+                return ResponseEntity.status(401).body(new LoginResponse(errorMessage, false));
+            }
+
+            Optional<CustomUser> optionalUser = customUserRepository.findById(request.getUsername());
+
+            if (optionalUser.isEmpty()){
+                return ResponseEntity.status(401).body(new LoginResponse("User not found", false));
+            } 
+
+            CustomUser user = optionalUser.get();
+            String updatedPassword = passwordEncoder.encode(request.getNewPassword());
+            user.setPassword(updatedPassword);
+            customUserRepository.save(user);
+
+            return ResponseEntity.ok(new LoginResponse("Password reset successfully", true));
+        } catch (AuthenticationException e){
+            return ResponseEntity.status(401).body(new LoginResponse("Unable to reset password", false));
+        }
+    }
+
+    
 
     /* 
     @PostMapping("/logout")
