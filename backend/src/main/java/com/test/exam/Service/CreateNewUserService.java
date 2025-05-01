@@ -24,7 +24,7 @@ public class CreateNewUserService implements Command<CustomUser, String>{
     @Override
     public ResponseEntity<String> execute(CustomUser user){
 
-        Optional<CustomUser> optionalUser = customUserRepository.findById(user.getUsername());
+        Optional<CustomUser> optionalUser = customUserRepository.findByUsername(user.getUsername());
         if (!optionalUser.isPresent()){
             customUserRepository.save(new CustomUser(user.getUsername(), encoder.encode(user.getPassword())));
             return ResponseEntity.ok("Success");

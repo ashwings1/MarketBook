@@ -57,7 +57,7 @@ public class AuthenticationController {
                 return ResponseEntity.status(401).body(new LoginResponse(errorMessage, false));
             }
 
-            Optional<CustomUser> optionalUser = customUserRepository.findById(request.getUsername());
+            Optional<CustomUser> optionalUser = customUserRepository.findByUsername(request.getUsername());
 
             if (optionalUser.isEmpty()){
                 return ResponseEntity.status(401).body(new LoginResponse("User not found", false));

@@ -2,6 +2,8 @@ package com.test.exam.Security;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -10,6 +12,10 @@ import jakarta.persistence.Table;
 public class CustomUser {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
+    private Long id;
+
     @Column(name="username")
     private String username;
 
@@ -24,6 +30,16 @@ public class CustomUser {
     public CustomUser(String username, String password){
         this.username = username;
         this.password = password;
+    }
+
+    //Getter for id
+    public Long getId(){
+        return id;
+    }
+
+    //Setter for id
+    public void setId(Long id){
+        this.id = id;
     }
 
     //Getter for username
