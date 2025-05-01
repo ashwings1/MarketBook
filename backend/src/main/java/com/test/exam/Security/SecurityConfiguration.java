@@ -1,5 +1,6 @@
 package com.test.exam.Security;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -18,6 +20,11 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 
 @Configuration
@@ -54,10 +61,23 @@ public class SecurityConfiguration {
                     .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                     .authorizeHttpRequests(authorize -> {
                         authorize.requestMatchers(HttpMethod.POST, "/track-metric").permitAll();
-                        authorize.requestMatchers("/createnewuser", "/login", "/actuator/**").permitAll();
+                        authorize.requestMatchers("/registeruser", "/login", "/logout", "/actuator/**").permitAll();
 
                         authorize.anyRequest().authenticated();
                     })
+                    .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessHandler(new LogoutSuccessHandler() {
+                            @Override
+                            public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authenticaiton) throws IOException {
+                                response.setContentType("application/json");
+                                response.getWriter().write("{\"message\":\"Logout Successful\",\"success\":true}"
+                                );
+                            }
+                        })
+                        .deleteCookies("JSESSIONID")
+                        .invalidateHttpSession(true)
+                    )
                     .addFilterBefore(
                             new BasicAuthenticationFilter(authenticationManager(httpSecurity)),
                             UsernamePasswordAuthenticationFilter.class
