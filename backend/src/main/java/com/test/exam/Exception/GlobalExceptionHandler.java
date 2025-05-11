@@ -26,4 +26,9 @@ public class GlobalExceptionHandler {
         return new ErrorResponse(exception.getMessage());
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    public ErrorResponse handleUnauthorizedException(UnauthorizedException exception){
+        return new ErrorResponse(exception.getMessage());
+    }
+
 }

@@ -1,40 +1,64 @@
 package com.test.exam.Security;
 
-import java.io.IOException;
 import java.util.Arrays;
+
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import jakarta.servlet.http.HttpServletRequest;
+import com.test.exam.Security.JWT.JwtAuthenticationFilter;
+
 import jakarta.servlet.http.HttpServletResponse;
-
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-
 
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfiguration {
 
+    private final JwtAuthenticationFilter jwtAuthFilter;
+    private final UserDetailsService userDetailsService;
+
+    public SecurityConfiguration(JwtAuthenticationFilter jwtAuthFilter, UserDetailsService userDetailsService){
+        this.jwtAuthFilter = jwtAuthFilter;
+        this.userDetailsService = userDetailsService;
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+
+     @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
+        return config.getAuthenticationManager();
+    }
+    
+
+    /* 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity.getSharedObject(AuthenticationManagerBuilder.class).build();
     }
+    */
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -59,30 +83,23 @@ public class SecurityConfiguration {
         return httpSecurity
                     .csrf(AbstractHttpConfigurer::disable) 
                     .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                    .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .authorizeHttpRequests(authorize -> {
+                        authorize.requestMatchers("/api/auth/**").permitAll();
+                        authorize.requestMatchers("/actuator/**").permitAll();
                         authorize.requestMatchers(HttpMethod.POST, "/track-metric").permitAll();
-                        authorize.requestMatchers("/register", "/login", "/logout", "/reset-password", "/actuator/**").permitAll();
-
+                        authorize.requestMatchers("/account").permitAll();
                         authorize.anyRequest().authenticated();
                     })
-                    .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessHandler(new LogoutSuccessHandler() {
-                            @Override
-                            public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authenticaiton) throws IOException {
+                    .exceptionHandling(exception -> exception
+                            .authenticationEntryPoint((request, response, authException) -> {
+                                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                                 response.setContentType("application/json");
-                                response.getWriter().write("{\"message\":\"Logout Successful\",\"success\":true}"
-                                );
-                            }
-                        })
-                        .deleteCookies("JSESSIONID")
-                        .invalidateHttpSession(true)
-                    )
-                    .addFilterBefore(
-                            new BasicAuthenticationFilter(authenticationManager(httpSecurity)),
-                            UsernamePasswordAuthenticationFilter.class
-                        )
+                            }))
+                    
+                    .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                     .build();
     }
+
     
 }
