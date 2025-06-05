@@ -7,8 +7,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.test.exam.Command;
-import com.test.exam.Security.CustomUser;
-import com.test.exam.Security.CustomUserRepository;
+import com.test.exam.Model.CustomUser;
+import com.test.exam.Model.CustomUserRepository;
 
 @Service
 public class CreateNewUserService implements Command<CustomUser, String>{
@@ -26,7 +26,7 @@ public class CreateNewUserService implements Command<CustomUser, String>{
 
         Optional<CustomUser> optionalUser = customUserRepository.findByUsername(user.getUsername());
         if (!optionalUser.isPresent()){
-            customUserRepository.save(new CustomUser(user.getUsername(), encoder.encode(user.getPassword())));
+            customUserRepository.save(new CustomUser(user.getUsername(), encoder.encode(user.getPassword()), user.getFirstName(), user.getLastName()));
             return ResponseEntity.ok("Success");
         }
         

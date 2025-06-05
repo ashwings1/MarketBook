@@ -1,4 +1,4 @@
-package com.test.exam.Security;
+package com.test.exam.Model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,14 +22,32 @@ public class CustomUser {
     @Column(name="password")
     private String password;
 
+    @Column(name="first_name")
+    private String firstName;
+
+    @Column(name="last_name")
+    private String lastName;
+
     //Default constructor
     public CustomUser(){
 
     }
 
-    public CustomUser(String username, String password){
+    //With id
+    public CustomUser(Long id, String username, String password, String firstName, String lastName){
+        this.id = id;
         this.username = username;
         this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    //Without id
+    public CustomUser(String username, String password, String firstName, String lastName){
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     //Getter for id
@@ -60,6 +78,26 @@ public class CustomUser {
     //Setter for password
     public void setPassword(String password){
         this.password = password;
+    }
+
+    //Getter for firstName
+    public String getFirstName(){
+        return firstName;
+    }
+
+    //Setter for firstName
+    public void setFirstName(String firstName){
+        this.firstName = firstName;
+    }
+
+    //Getter for lastName
+    public String getLastName(){
+        return lastName;
+    }
+
+    //Setter for lastName
+    public void setLastName(String lastName){
+        this.lastName = lastName;
     }
 }
  

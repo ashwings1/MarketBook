@@ -9,8 +9,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.test.exam.Security.CustomUser;
-import com.test.exam.Security.CustomUserRepository;
+import com.test.exam.Model.CustomUser;
+import com.test.exam.Model.CustomUserRepository;
 
 @Service
 public class CustomUserDetailService implements UserDetailsService{

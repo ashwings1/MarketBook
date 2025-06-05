@@ -3,17 +3,13 @@ package com.test.exam.Controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.test.exam.Model.AccountDTO;
 import com.test.exam.Model.Product;
 import com.test.exam.Model.ProductDTO;
 import com.test.exam.Model.UpdateProductCommand;
-import com.test.exam.Security.CustomUser;
 import com.test.exam.Service.CreateProductService;
 import com.test.exam.Service.DeleteProductService;
-import com.test.exam.Service.GetAccountService;
 import com.test.exam.Service.GetProductService;
 import com.test.exam.Service.UpdateProductService;
 
@@ -35,14 +31,12 @@ public class ExamController {
     private final CreateProductService createProductService;
     private final UpdateProductService updateProductService;
     private final DeleteProductService deleteProductService;
-    private final GetAccountService getAccountService;
 
-    public ExamController(GetProductService getProductService, CreateProductService createProductService, UpdateProductService updateProductService, DeleteProductService deleteProductService, GetAccountService getAccountService){
+    public ExamController(GetProductService getProductService, CreateProductService createProductService, UpdateProductService updateProductService, DeleteProductService deleteProductService){
         this.getProductService = getProductService;
         this.createProductService = createProductService;
         this.updateProductService = updateProductService;
         this.deleteProductService = deleteProductService;
-        this.getAccountService = getAccountService;
     }
     
     //Get product
@@ -67,12 +61,6 @@ public class ExamController {
     @DeleteMapping("/product/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Integer id){
         return deleteProductService.execute(id);
-    }
-
-    //Account
-    @GetMapping("/account")
-    public ResponseEntity<AccountDTO> account(@AuthenticationPrincipal CustomUser customUser){
-        return getAccountService.execute(customUser);
     }
 
     Counter frontendClicks = Counter.builder("frontend_clicks").description("Total Frontend clicks").register(Metrics.globalRegistry);

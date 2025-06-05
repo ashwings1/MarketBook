@@ -13,27 +13,31 @@ import com.test.exam.Exception.UnauthorizedException;
 import com.test.exam.Model.AccountDTO;
 import com.test.exam.Model.CustomUser;
 import com.test.exam.Model.CustomUserRepository;
+import com.test.exam.Model.UpdateAccountRequest;
 import com.test.exam.Security.JWT.JwtUtil;
 
 import io.jsonwebtoken.JwtException;
 
 @Service
-public class GetAccountService implements Command<String, AccountDTO>{
+public class UpdateAccountService implements Command<UpdateAccountRequest, AccountDTO>{
 
-    private final Logger logger = LoggerFactory.getLogger(GetAccountService.class);
-    
-    private final CustomUserRepository customUserRepository;
-    private final JwtUtil jwtUtil;
+    private final Logger logger = LoggerFactory.getLogger(UpdateAccountService.class);
+
     private final UserDetailsService userDetailsService;
+    private final JwtUtil jwtUtil;
+    private final CustomUserRepository customUserRepository;
 
-    public GetAccountService(CustomUserRepository customUserRepository, JwtUtil jwtUtil, UserDetailsService userDetailsService){
-        this.customUserRepository = customUserRepository;
-        this.jwtUtil = jwtUtil;
+    public UpdateAccountService(UserDetailsService userDetailsService, JwtUtil jwtUtil, CustomUserRepository customUserRepository){
         this.userDetailsService = userDetailsService;
+        this.jwtUtil = jwtUtil;
+        this.customUserRepository = customUserRepository;
     }
 
     @Override
-    public ResponseEntity<AccountDTO> execute(String authHeader){
+    public ResponseEntity<AccountDTO> execute(UpdateAccountRequest request){
+
+        String authHeader = request.getAuthHeader();
+        CustomUser updateRequest = request.getUpdateData();
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")){
             throw new UnauthorizedException("Valid authentication token required");
@@ -52,18 +56,28 @@ public class GetAccountService implements Command<String, AccountDTO>{
                 throw new UnauthorizedException("Invalid or expired token");
             }
 
-            //Fetch complete user data from DB
+            //Update user first name and/or last name
             CustomUser user = customUserRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+           
+            if (updateRequest.getFirstName() != null){
+                user.setFirstName(updateRequest.getFirstName());
+            }
+
+            if (updateRequest.getLastName() != null){
+                user.setLastName(updateRequest.getLastName());
+            }
             
-            AccountDTO accountDTO = new AccountDTO(user);
+            CustomUser savedUser = customUserRepository.save(user);
             
-            logger.debug("Account details retrieved for user: {}", username);
+            AccountDTO accountDTO = new AccountDTO(savedUser);
+
             return ResponseEntity.ok(accountDTO);
-            
+
         } catch (JwtException e){
             logger.debug("Invalid token in account retrieval: {}", e.getMessage());
             throw new UnauthorizedException("Invalid authentication token");
         }
+ 
     }
     
 }

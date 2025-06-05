@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.test.exam.Exception.UnauthorizedException;
+import com.test.exam.Model.CustomUser;
+import com.test.exam.Model.CustomUserRepository;
 import com.test.exam.Security.JWT.TokenService;
 import com.test.exam.Service.CreateNewUserService;
 

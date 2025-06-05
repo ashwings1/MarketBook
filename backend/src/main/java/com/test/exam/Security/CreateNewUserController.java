@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.test.exam.Model.CustomUser;
 import com.test.exam.Service.CreateNewUserService;
 
 @RestController
