@@ -1,8 +1,11 @@
 package com.test.exam.Service;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -31,13 +34,17 @@ public class CustomUserDetailService implements UserDetailsService{
 
         CustomUser customUser = userOptional.get();
 
-        //Add roles and authorities to user -> use relational mappings to get roles and authorities
-
-        return new User(
-                customUser.getUsername(),
-                customUser.getPassword(),
-                new ArrayList<>()
+        // Convert your Role enum to Spring Security authorities
+        Collection<GrantedAuthority> authorities = Collections.singletonList(
+            new SimpleGrantedAuthority("ROLE_" + customUser.getRole().name())
         );
-    }
 
+        return User.builder()
+                .username(customUser.getUsername())
+                .password(customUser.getPassword())
+                .authorities(authorities)
+                .build();
+    }
 }
+
+

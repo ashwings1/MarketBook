@@ -26,7 +26,7 @@ public class CreateNewUserService implements Command<CustomUser, String>{
 
         Optional<CustomUser> optionalUser = customUserRepository.findByUsername(user.getUsername());
         if (!optionalUser.isPresent()){
-            customUserRepository.save(new CustomUser(user.getUsername(), encoder.encode(user.getPassword()), user.getFirstName(), user.getLastName()));
+            customUserRepository.save(new CustomUser(user.getUsername(), encoder.encode(user.getPassword()), user.getFirstName(), user.getLastName(), user.getRole()));
             return ResponseEntity.ok("Success");
         }
         

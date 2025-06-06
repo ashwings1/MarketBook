@@ -143,12 +143,13 @@ public class AuthenticationController {
             }
 
             Optional<CustomUser> optionalUser = customUserRepository.findByUsername(request.getUsername());
-
+            
             if (optionalUser.isEmpty()){
                 return ResponseEntity.status(404).body(new LoginResponse("User not found", false));
             } 
 
             CustomUser user = optionalUser.get();
+
             String updatedPassword = passwordEncoder.encode(request.getNewPassword());
             user.setPassword(updatedPassword);
             customUserRepository.save(user);

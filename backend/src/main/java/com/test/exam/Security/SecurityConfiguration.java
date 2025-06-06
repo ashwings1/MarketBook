@@ -85,10 +85,19 @@ public class SecurityConfiguration {
                     .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                     .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .authorizeHttpRequests(authorize -> {
+                        //Public endpoints (no auth)
                         authorize.requestMatchers("/api/auth/**").permitAll();
                         authorize.requestMatchers("/actuator/**").permitAll();
+
+                        //Role-based endpoints
+                        authorize.requestMatchers("/product/**").hasRole("SELLER");
+                        authorize.requestMatchers("/products");
+
                         authorize.requestMatchers(HttpMethod.POST, "/track-metric").permitAll();
+
                         authorize.requestMatchers("/account").permitAll();
+
+                        //All other requests require auth
                         authorize.anyRequest().authenticated();
                     })
                     .exceptionHandling(exception -> exception

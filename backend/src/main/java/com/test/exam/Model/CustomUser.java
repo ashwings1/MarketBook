@@ -2,6 +2,8 @@ package com.test.exam.Model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,26 +30,32 @@ public class CustomUser {
     @Column(name="last_name")
     private String lastName;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name="role")
+    private Role role = Role.BUYER; //default role
+
     //Default constructor
     public CustomUser(){
 
     }
 
     //With id
-    public CustomUser(Long id, String username, String password, String firstName, String lastName){
+    public CustomUser(Long id, String username, String password, String firstName, String lastName, Role role){
         this.id = id;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.role = role;
     }
 
     //Without id
-    public CustomUser(String username, String password, String firstName, String lastName){
+    public CustomUser(String username, String password, String firstName, String lastName, Role role){
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.role = role;
     }
 
     //Getter for id
@@ -99,5 +107,14 @@ public class CustomUser {
     public void setLastName(String lastName){
         this.lastName = lastName;
     }
+
+    public Role getRole(){
+        return role;
+    }
+
+    public void setRole(Role role){
+        this.role = role;
+    }
+
 }
  

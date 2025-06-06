@@ -3,6 +3,7 @@ package com.test.exam.Controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.test.exam.Model.Product;
@@ -39,26 +40,29 @@ public class ExamController {
         this.deleteProductService = deleteProductService;
     }
     
-    //Get product
-    @GetMapping("/product")
+    //Get products
+    @GetMapping("/products")
     public ResponseEntity<List<ProductDTO>> getProduct(){
         return getProductService.execute(null);
     }
 
     //Create product
-    @PostMapping("/products")
+    @PostMapping("/product/create")
+    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ProductDTO> createProduct(@RequestBody Product product){
         return createProductService.execute(product);
     }
 
     //Update Product by id
     @PutMapping("/product/{id}")
+    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable Integer id, @RequestBody Product product){
         return updateProductService.execute(new UpdateProductCommand(id, product));
     }
 
     //Delete Product by id
     @DeleteMapping("/product/{id}")
+    @PreAuthorize("hasRole('SELLER')")
     public ResponseEntity<Void> deleteProduct(@PathVariable Integer id){
         return deleteProductService.execute(id);
     }

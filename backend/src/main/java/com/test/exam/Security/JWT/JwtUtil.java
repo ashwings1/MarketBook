@@ -1,7 +1,9 @@
 package com.test.exam.Security.JWT;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -92,6 +94,18 @@ public class JwtUtil {
         return getClaims(token)
                 .getExpiration()
                 .before(new Date());
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<String> extractRoles(String token){
+        Claims claims = getClaims(token);
+        List<String> roles = claims.get("roles", List.class);
+        return roles != null ? roles : Collections.emptyList();
+    }
+
+    public String extractSingleRole(String token){
+        List<String> roles = extractRoles(token);
+        return roles != null && !roles.isEmpty() ? roles.get(0) : null;
     }
 
     /* 
