@@ -54,7 +54,7 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<String> createNewUser(@RequestBody CustomUser user){
         return createNewUserService.execute(user);
-    }
+    } 
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest loginRequest){

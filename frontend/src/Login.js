@@ -16,7 +16,7 @@ function LoginForm() {
         setIsLoading(true);
 
         try {
-            const response = await fetch('http://localhost:8000/login', {
+            const response = await fetch('http://localhost:8000/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -28,34 +28,28 @@ function LoginForm() {
 
             if (!response.ok) {
                 //Tracking failed login
-                trackRequest('POST', '/login/error');
+                //trackRequest('POST', '/login/error');
                 throw new Error(data.message || 'Login failed');
             }
+            if (data.accessToken) {
+                setSuccess('Login Successful');
 
-            if (data.success) {
-                //Tracking successful login
-                trackRequest('POST', '/login/success');
-
-                //Success message to user
-                setSuccess('Login successful!');
-
-                //Store user info in session storage/context
-                sessionStorage.setItem('isAuthenticated', 'true');
-                sessionStorage.setItem('username', username);
+                sessionStorage.setItem('accessToken', data.accessToken);
+                sessionStorage.setItem('refreshToken', data.refreshToken);
+                sessionStorage.setItem('accessTokenExpiration', data.accessTokenExpiration);
+                sessionStorage.setItem('refreshTokenExpiration', data.refreshTokenExpiration);
+                sessionStorage.setItem('tokenType', data.tokenType);
 
                 setUsername('');
                 setPassword('');
-
-                //Redirect to dashboard or home page
-                //window.location.href = '/dashboard';
             } else {
                 //Tracking failed authentication
-                trackRequest('POST', '/login/error');
+                //trackRequest('POST', '/login/error');
                 setError(data.message || 'Authentication failed');
             }
         } catch (error) {
             //Tracking general errors
-            trackRequest('POST', '/login/error');
+            //trackRequest('POST', '/login/error');
             setError(error.message || 'Invalid username or password');
             console.error('Login Error:', error);
         } finally {
@@ -112,6 +106,9 @@ function LoginForm() {
                     {isLoading ? 'Logging in...' : 'Login'}
                 </button>
             </form>
+            <div style={{ marginTop: '15px' }}>
+                <a href="/reset-password">Reset Password</a>
+            </div>
         </div>
     );
 }
