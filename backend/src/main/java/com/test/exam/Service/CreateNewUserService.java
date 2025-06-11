@@ -30,6 +30,6 @@ public class CreateNewUserService implements Command<CustomUser, String>{
             return ResponseEntity.ok("Success");
         }
         
-        return ResponseEntity.badRequest().body("Failure");
+        return ResponseEntity.badRequest().body("Username already exists");
     }
 }

@@ -69,7 +69,7 @@ function ResetPassword() {
             {error && (
                 <div className="error-message" style={{
                     color: 'red',
-                    merginBottom: '10px'
+                    marginBottom: '10px'
                 }}>
                     {error}
                 </div>
@@ -86,7 +86,7 @@ function ResetPassword() {
 
             <form onSubmit={handleSubmit}>
                 <div className="form-group" style={{ marginBottom: '10px' }}>
-                    <label htmlFor="username">Username:</label>
+                    <label htmlFor="username">Username: </label>
                     <input
                         type="text"
                         id="username"
@@ -98,7 +98,7 @@ function ResetPassword() {
                 </div>
 
                 <div className="form-group" style={{ marginBottom: '10px' }}>
-                    <label htmlFor="newPassword">New Password:</label>
+                    <label htmlFor="newPassword">New Password: </label>
                     <input
                         type="password"
                         id="newPassword"
@@ -111,7 +111,7 @@ function ResetPassword() {
                 </div>
 
                 <div className="form-group" style={{ marginBottom: '10px' }}>
-                    <label htmlFor="confirmPassword">Confirm Password:</label>
+                    <label htmlFor="confirmPassword">Confirm Password: </label>
                     <input
                         type="password"
                         id="confirmPassword"
