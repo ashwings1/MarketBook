@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from './AuthContext';
 import { trackRequest } from './Metrics';
 
 function LoginForm() {
@@ -7,6 +9,11 @@ function LoginForm() {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { login } = useAuth();
+
+    const from = location.state?.from?.pathname || '/account'
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -34,14 +41,18 @@ function LoginForm() {
             if (data.accessToken) {
                 setSuccess('Login Successful');
 
-                sessionStorage.setItem('accessToken', data.accessToken);
-                sessionStorage.setItem('refreshToken', data.refreshToken);
-                sessionStorage.setItem('accessTokenExpiration', data.accessTokenExpiration);
-                sessionStorage.setItem('refreshTokenExpiration', data.refreshTokenExpiration);
-                sessionStorage.setItem('tokenType', data.tokenType);
+                //sessionStorage.setItem('accessToken', data.accessToken);
+                //sessionStorage.setItem('refreshToken', data.refreshToken);
+                //sessionStorage.setItem('accessTokenExpiration', data.accessTokenExpiration);
+                //sessionStorage.setItem('refreshTokenExpiration', data.refreshTokenExpiration);
+                //sessionStorage.setItem('tokenType', data.tokenType);
+
+                login(data);
 
                 setUsername('');
                 setPassword('');
+
+                navigate(from, { replace: true });
             } else {
                 //Tracking failed authentication
                 //trackRequest('POST', '/login/error');
