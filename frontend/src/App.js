@@ -5,6 +5,7 @@ import LoginForm from './Login';
 import ResetPassword from './ResetPassword';
 import RegisterUser from './Register';
 import Account from './Account';
+import ProductsGrid from './ProductsGrid';
 import { AuthProvider, useAuth } from './AuthContext';
 import { ProtectedRoute } from './ProtectedRoute';
 import { trackRequest } from './Metrics';
@@ -24,6 +25,7 @@ function Home() {
         {isAuthenticated ? (
           <>
             <Link to="/account" style={{ marginRight: '20px' }}>Account</Link>
+            <Link to="/products" style={{ marginRight: '40px' }}>Products</Link>
             <button
               onClick={logout}
               style={{
@@ -75,6 +77,10 @@ function App() {
                   <Link to="/">Back to Home</Link>
                 </div>
               }
+            />
+            <Route
+              path="/products"
+              element={<ProductsGrid />}
             />
             <Route
               path="/reset-password"
