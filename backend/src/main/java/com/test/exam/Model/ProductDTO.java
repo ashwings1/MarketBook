@@ -1,10 +1,18 @@
 package com.test.exam.Model;
 
+import java.time.LocalDateTime;
+
 public class ProductDTO {
     private Integer id;
     private String name;
     private String description;
     private Double price;
+    private String category;
+    private String imageUrl;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private Integer sellerId;
+
 
     public ProductDTO(){
 
@@ -15,6 +23,11 @@ public class ProductDTO {
         this.name = product.getName();
         this.description = product.getDescription();
         this.price = product.getPrice();
+        this.category = product.getCategory();
+        this.imageUrl = product.getImageUrl();
+        this.createdAt = product.getCreatedAt();
+        this.updatedAt = product.getUpdatedAt();
+        this.sellerId = product.getSellerId();
     }
 
     //Getter for ID
@@ -57,6 +70,55 @@ public class ProductDTO {
         this.price = price;
     }
 
+    //Getter for category
+    public String getCategory(){
+        return category;
+    }
+
+    //Setter for category
+    public void setCategory(String category){
+        this.category = category;
+    }
+
+    //Getter for image_url
+    public String getImageUrl(){
+        return imageUrl;
+    }
+
+    //Setter for image_url
+    public void setImageUrl(String imageUrl){
+        this.imageUrl = imageUrl;
+    }
+
+    //Getter for created_at
+    public LocalDateTime getCreatedAt(){
+        return createdAt;
+    }
+
+    //Setter for created_at
+    public void setCreatedAt(LocalDateTime createdAt){
+        this.createdAt = createdAt;
+    }
+
+    //Getter for updated_at
+    public LocalDateTime getUpdatedAt(){
+        return updatedAt;
+    }
+
+    //Setter for updated_at
+    public void setUpdatedAt(LocalDateTime updatedAt){
+        this.updatedAt = updatedAt;
+    }
+
+    //Getter for seller_id
+    public Integer getSellerId(){
+        return sellerId;
+    }
+
+    //Setter for seller_id
+    public void setSellerId(Integer sellerId){
+        this.sellerId = sellerId;
+    }
 
     
 }

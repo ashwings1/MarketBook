@@ -12,6 +12,7 @@ import com.test.exam.Model.UpdateProductCommand;
 import com.test.exam.Service.CreateProductService;
 import com.test.exam.Service.DeleteProductService;
 import com.test.exam.Service.GetProductService;
+import com.test.exam.Service.GetSellerProductService;
 import com.test.exam.Service.UpdateProductService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,18 +33,27 @@ public class ExamController {
     private final CreateProductService createProductService;
     private final UpdateProductService updateProductService;
     private final DeleteProductService deleteProductService;
+    private final GetSellerProductService getSellerProductService;
 
-    public ExamController(GetProductService getProductService, CreateProductService createProductService, UpdateProductService updateProductService, DeleteProductService deleteProductService){
+    public ExamController(GetProductService getProductService, CreateProductService createProductService, UpdateProductService updateProductService, DeleteProductService deleteProductService, GetSellerProductService getSellerProductService){
         this.getProductService = getProductService;
         this.createProductService = createProductService;
         this.updateProductService = updateProductService;
         this.deleteProductService = deleteProductService;
+        this.getSellerProductService = getSellerProductService;
     }
     
     //Get products
     @GetMapping("/products")
     public ResponseEntity<List<ProductDTO>> getProduct(){
         return getProductService.execute(null);
+    }
+
+    //Get products by seller id
+    @GetMapping("/products/seller/{sellerId}")
+    @PreAuthorize("hasRole('SELLER')")
+    public ResponseEntity<List<ProductDTO>> getSellerProduct(@PathVariable Integer sellerId){
+        return getSellerProductService.execute(sellerId);
     }
 
     //Create product

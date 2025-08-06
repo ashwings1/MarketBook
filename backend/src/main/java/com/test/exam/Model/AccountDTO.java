@@ -4,6 +4,7 @@ public class AccountDTO {
     private Long id;
     private String firstName;
     private String lastName;
+    private Role role;
 
     public AccountDTO(){}
 
@@ -15,6 +16,7 @@ public class AccountDTO {
         this.id = user.getId();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
+        this.role = user.getRole();
     }
 
     //Getter for Id
@@ -45,6 +47,14 @@ public class AccountDTO {
     //Setter for lastName
     public void setLastName(String lastName){
         this.lastName = lastName;
+    }
+
+    public Role getRole(){
+        return role;
+    }
+
+    public void setRole(Role role){
+        this.role = role;
     }
 
     
