@@ -36,4 +36,9 @@ public class GlobalExceptionHandler {
         return new ErrorResponse(exception.getMessage());
     }
 
+    @ExceptionHandler(ProductNotOwnedException.class)
+    public ErrorResponse handleProductNotOwnedException(ProductNotOwnedException exception){
+        return new ErrorResponse(exception.getMessage());
+    }
+
 }

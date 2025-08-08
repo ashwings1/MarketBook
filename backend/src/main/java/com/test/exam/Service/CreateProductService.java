@@ -3,6 +3,7 @@ package com.test.exam.Service;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.Authentication;
 
 import com.test.exam.Command;
 import com.test.exam.Model.Product;
@@ -19,8 +20,9 @@ public class CreateProductService implements Command<Product, ProductDTO>{
     }
 
     @Override
-    public ResponseEntity<ProductDTO> execute(Product product){
+    public ResponseEntity<ProductDTO> execute(Authentication authentication, Product product){
         //Return product created
+        
         Product createdProduct = productRepository.save(product);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new ProductDTO(createdProduct));

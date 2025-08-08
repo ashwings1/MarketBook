@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.test.exam.Model.Product;
@@ -59,8 +60,8 @@ public class ExamController {
     //Create product
     @PostMapping("/product/create")
     @PreAuthorize("hasRole('SELLER')")
-    public ResponseEntity<ProductDTO> createProduct(@RequestBody Product product){
-        return createProductService.execute(product);
+    public ResponseEntity<ProductDTO> createProduct(Authentication authentication, @RequestBody Product product){
+        return createProductService.execute(authentication, product);
     }
 
     //Update Product by id
