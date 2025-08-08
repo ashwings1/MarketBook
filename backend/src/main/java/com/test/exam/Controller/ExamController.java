@@ -60,8 +60,8 @@ public class ExamController {
     //Create product
     @PostMapping("/product/create")
     @PreAuthorize("hasRole('SELLER')")
-    public ResponseEntity<ProductDTO> createProduct(Authentication authentication, @RequestBody Product product){
-        return createProductService.execute(authentication, product);
+    public ResponseEntity<ProductDTO> createProduct(@RequestBody Product product){
+        return createProductService.execute(product);
     }
 
     //Update Product by id

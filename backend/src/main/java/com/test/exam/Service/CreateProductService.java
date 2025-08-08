@@ -3,7 +3,6 @@ package com.test.exam.Service;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.security.core.Authentication;
 
 import com.test.exam.Command;
 import com.test.exam.Model.Product;
@@ -14,14 +13,19 @@ import com.test.exam.Model.ProductRepository;
 public class CreateProductService implements Command<Product, ProductDTO>{
     
     private final ProductRepository productRepository;
+    private final UserContextService userContextService;
 
-    public CreateProductService(ProductRepository productRepository){
+    public CreateProductService(ProductRepository productRepository, UserContextService userContextService){
         this.productRepository = productRepository;
+        this.userContextService = userContextService;
     }
 
     @Override
-    public ResponseEntity<ProductDTO> execute(Authentication authentication, Product product){
-        //Return product created
+    public ResponseEntity<ProductDTO> execute(Product product){
+        //Current seller ID from auth context
+        Integer sellerId = userContextService.getCurrentUserId();
+
+        product.setSellerId(sellerId);
         
         Product createdProduct = productRepository.save(product);
 
