@@ -20,22 +20,11 @@ const SellerProductManager = ({ user }) => {
 
     const isSeller = user?.role === 'SELLER';
 
-    if (!isSeller) {
-        return (
-            <div className="not-seller-container" style={{
-                borderColor: '#FF0000',
-                color: '#FF0000',
-                borderRadius: '25px'
-            }}>
-                <h3 className="denied" style={{ fontWeight: 'bold' }}>Access Denied</h3>
-                <p>You need Seller privileges to access this section.</p>
-            </div>
-        );
-    }
-
     useEffect(() => {
-        fetchSellerProducts();
-    }, []);
+        if (isSeller) {
+            fetchSellerProducts();
+        }
+    }, [isSeller]);
 
     const fetchSellerProducts = async () => {
         setLoading(true);
@@ -211,6 +200,19 @@ const SellerProductManager = ({ user }) => {
                     border: '2px solid transparent',
                     borderBottom: '2px solid #2563eb'
                 }}></div>
+            </div>
+        );
+    }
+
+    if (!isSeller) {
+        return (
+            <div className="not-seller-container" style={{
+                borderColor: '#FF0000',
+                color: '#FF0000',
+                borderRadius: '25px'
+            }}>
+                <h3 className="denied" style={{ fontWeight: 'bold' }}>Access Denied</h3>
+                <p>You need Seller privileges to access this section.</p>
             </div>
         );
     }
