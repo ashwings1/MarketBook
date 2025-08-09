@@ -19,7 +19,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> findBySellerIdOrderByCreatedAtDesc(Integer sellerId);
 
     //Check if product belongs to seller
-    @Query("SELECT p FROM examproduct p WHERE p.sellerId = :sellerId AND p.id = :id")
     Optional<Product> findBySellerIdAndId(@Param("sellerId") Integer sellerId, @Param("id") Integer id);
 
     //Get products with seller details
