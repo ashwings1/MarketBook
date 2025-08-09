@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
 import { Link } from 'react-router-dom';
+import SellerProductManager from './SellerProductManager';
 
 const Account = () => {
     const { fetchWithAuth, logout, isAuthenticated } = useAuth();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [activeView, setActiveView] = useState('profile');
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -26,7 +28,8 @@ const Account = () => {
                 setUser({
                     id: userData.id,
                     firstName: userData.firstName,
-                    lastName: userData.lastName
+                    lastName: userData.lastName,
+                    role: userData.role
                 });
             } else {
                 throw new Error('Failed to fetch user data');
