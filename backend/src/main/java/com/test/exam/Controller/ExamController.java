@@ -12,6 +12,7 @@ import com.test.exam.Model.ProductDTO;
 import com.test.exam.Model.UpdateProductCommand;
 import com.test.exam.Service.CreateProductService;
 import com.test.exam.Service.DeleteProductService;
+import com.test.exam.Service.GetProductByIdService;
 import com.test.exam.Service.GetProductService;
 import com.test.exam.Service.GetSellerProductService;
 import com.test.exam.Service.UpdateProductService;
@@ -35,19 +36,27 @@ public class ExamController {
     private final UpdateProductService updateProductService;
     private final DeleteProductService deleteProductService;
     private final GetSellerProductService getSellerProductService;
+    private final GetProductByIdService getProductByIdService;
 
-    public ExamController(GetProductService getProductService, CreateProductService createProductService, UpdateProductService updateProductService, DeleteProductService deleteProductService, GetSellerProductService getSellerProductService){
+    public ExamController(GetProductService getProductService, CreateProductService createProductService, UpdateProductService updateProductService, DeleteProductService deleteProductService, GetSellerProductService getSellerProductService, GetProductByIdService getProductByIdService){
         this.getProductService = getProductService;
         this.createProductService = createProductService;
         this.updateProductService = updateProductService;
         this.deleteProductService = deleteProductService;
         this.getSellerProductService = getSellerProductService;
+        this.getProductByIdService = getProductByIdService;
     }
     
     //Get products
     @GetMapping("/products")
     public ResponseEntity<List<ProductDTO>> getProduct(){
         return getProductService.execute(null);
+    }
+
+    //Get products by id
+    @GetMapping("/products/{id}")
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable Integer id){
+        return getProductByIdService.execute(id);
     }
 
     //Get products by seller id

@@ -92,7 +92,7 @@ public class SecurityConfiguration {
                         //Role-based endpoints
                         authorize.requestMatchers("/product/**").hasRole("SELLER");
                         authorize.requestMatchers("/products/seller/**").hasRole("SELLER");
-                        authorize.requestMatchers("/products");
+                        authorize.requestMatchers("/products/**");
 
                         authorize.requestMatchers(HttpMethod.POST, "/track-metric").permitAll();
 

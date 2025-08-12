@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 
@@ -14,6 +13,9 @@ import org.springframework.data.repository.query.Param;
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     List<Product> getProductByName(String name);
+
+    //Get product by product id
+    Optional<Product> getProductById(Integer id);
     
     //Get product by seller (index)
     List<Product> findBySellerIdOrderByCreatedAtDesc(Integer sellerId);
