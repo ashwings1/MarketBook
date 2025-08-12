@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
+import { useNavigate, Link } from 'react-router-dom';
 
 const ProductsGrid = () => {
     const { fetchWithAuth, isAuthenticated } = useAuth();
+    const navigate = useNavigate();
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -41,13 +43,71 @@ const ProductsGrid = () => {
         }
     };
 
+    const handleProductClick = (productId) => {
+        navigate(`/products/${productId}`);
+    };
 
     return (
         <div style={{ minHeight: '100vh', backgroundColor: '#f9fafb', padding: '16px' }}>
             <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-                <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold', marginBottom: '32px', color: '#111827' }}>
-                    Products
-                </h1>
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '32px',
+                    paddingBottom: '16px',
+                    borderBottom: '1px solid #e5e7eb'
+                }}>
+                    <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#111827', margin: 0 }}>
+                        Products
+                    </h1>
+
+                    <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                        <Link
+                            to="/"
+                            style={{
+                                padding: '8px 16px',
+                                color: '#6b7280',
+                                textDecoration: 'none',
+                                fontSize: '14px',
+                                fontWeight: '500',
+                                borderRadius: '6px',
+                                transition: 'background-color 0.2s'
+                            }}
+                            onMouseEnter={(e) => {
+                                e.target.style.backgroundColor = '#f3f4f6';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.target.style.backgroundColor = 'transparent';
+                            }}
+                        >
+                            Home
+                        </Link>
+
+                        <Link
+                            to="/account"
+                            style={{
+                                padding: '10px 20px',
+                                backgroundColor: '#3b82f6',
+                                color: 'white',
+                                textDecoration: 'none',
+                                fontSize: '14px',
+                                fontWeight: '600',
+                                borderRadius: '8px',
+                                transition: 'background-color 0.2s',
+                                boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+                            }}
+                            onMouseEnter={(e) => {
+                                e.target.style.backgroundColor = '#2563eb';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.target.style.backgroundColor = '#3b82f6';
+                            }}
+                        >
+                            Account
+                        </Link>
+                    </div>
+                </div>
 
                 <div style={{
                     display: 'grid',
@@ -65,6 +125,7 @@ const ProductsGrid = () => {
                                 cursor: 'pointer',
                                 transition: 'box-shadow 0.2s',
                             }}
+                            onClick={() => handleProductClick(product.id)}
                             onMouseEnter={(e) => {
                                 e.target.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
                             }}
@@ -139,6 +200,10 @@ const ProductsGrid = () => {
                                 }}
                                 onMouseLeave={(e) => {
                                     e.target.style.backgroundColor = '#3b82f6';
+                                }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    //Add to cart login in future
                                 }}>
                                 Add to Cart
                             </button>

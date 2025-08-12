@@ -6,6 +6,7 @@ import ResetPassword from './ResetPassword';
 import RegisterUser from './Register';
 import Account from './Account';
 import ProductsGrid from './ProductsGrid';
+import ProductDetail from './ProductDetail';
 import { AuthProvider, useAuth } from './AuthContext';
 import { ProtectedRoute } from './ProtectedRoute';
 import { trackRequest } from './Metrics';
@@ -81,6 +82,10 @@ function App() {
             <Route
               path="/products"
               element={<ProductsGrid />}
+            />
+            <Route
+              path="/products/:id"
+              element={<ProductDetail />}
             />
             <Route
               path="/reset-password"
