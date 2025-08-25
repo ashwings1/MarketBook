@@ -12,7 +12,7 @@ import com.test.exam.Model.CartRepository;
 @Service
 public class GetCartService implements Command<Integer, CartDTO> {
 
-    private CartRepository cartRepository;
+    private final CartRepository cartRepository;
 
     public GetCartService(CartRepository cartRepository){
         this.cartRepository = cartRepository;
@@ -20,16 +20,18 @@ public class GetCartService implements Command<Integer, CartDTO> {
     
     @Override
     public ResponseEntity<CartDTO> execute(Integer userId){
-        //Returns cart for userId
-        Cart cartRepo = cartRepository.findByUserId(userId)
-            .orElseGet(() -> {
-                Cart cart = new Cart();
-                cart.setUserId(userId);
-                return cartRepository.save(cart);
-            });
+        // Returns cart for userId
+        Cart cartRepo = cartRepository.findByUserId(userId);
+        
+        if (cartRepo == null) {
+            Cart cart = new Cart();
+            cart.setUserId(userId);
+            cart.setCreatedAt(java.time.LocalDateTime.now());
+            cart.setUpdatedAt(java.time.LocalDateTime.now());
+            cartRepo = cartRepository.save(cart);
+        }
         
         CartDTO cartDTO = new CartDTO(cartRepo);
-
         return ResponseEntity.status(HttpStatus.OK).body(cartDTO);
     }
 }
