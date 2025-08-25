@@ -23,10 +23,7 @@ public class AddToCartService implements Command<Integer, CartItemDTO>{
     private final ProductRepository productRepository;
     private final UserContextService userContextService;
 
-    public AddToCartService(CartItemRepository cartItemRepository, 
-                           CartRepository cartRepository, 
-                           ProductRepository productRepository,
-                           UserContextService userContextService){
+    public AddToCartService(CartItemRepository cartItemRepository, CartRepository cartRepository, ProductRepository productRepository, UserContextService userContextService){
         this.cartItemRepository = cartItemRepository;
         this.cartRepository = cartRepository;
         this.productRepository = productRepository;
