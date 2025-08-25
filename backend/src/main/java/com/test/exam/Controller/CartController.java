@@ -15,9 +15,9 @@ public class CartController {
 
     //Update Cart
 
-    //Get Cart Total
-
     //Delete from Cart
+
+    //Get Cart Total
 
     //Clear Cart
 
