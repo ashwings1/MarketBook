@@ -27,7 +27,7 @@ public class DeleteCartService implements Command<Integer, Void> {
     }
 
     @Override
-    public ResponseEntity<Void> execute(Integer cartItemId){
+    public ResponseEntity<Void> execute(Integer productId){
         Integer userId = userContextService.getCurrentUserId();
 
         Cart cart = cartRepository.findByUserId(userId);
@@ -35,9 +35,13 @@ public class DeleteCartService implements Command<Integer, Void> {
             throw new ResourceNotFoundException("Cart not found for user");
         }
 
-        Optional<CartItem> cartItem = cartItemRepository.findById(cartItemId);
+        Optional<CartItem> cartItem = cartItemRepository.findByCartIdAndProductId(cart.getId(), productId);
+        if (cartItem.isEmpty()){
+            throw new ResourceNotFoundException("Product not found in cart");
+        }
 
-        cartItemRepository.deleteById(cartItemId);
+        CartItem item = cartItem.get();
+        cartItemRepository.deleteById(item.getId());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
     

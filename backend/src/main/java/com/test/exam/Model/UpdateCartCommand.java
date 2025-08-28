@@ -1,22 +1,22 @@
 package com.test.exam.Model;
 
 public class UpdateCartCommand {
-    private Integer cartItemId;
+    private Integer productId;
     private Integer quantity;
 
-    public UpdateCartCommand(Integer cartItemId, Integer quantity){
-        this.cartItemId = cartItemId;
+    public UpdateCartCommand(Integer productId, Integer quantity){
+        this.productId = productId;
         this.quantity = quantity;
     }
 
-    //Getter for cartItemId
-    public Integer getCartItemId(){
-        return cartItemId;
+    //Getter for productId
+    public Integer getProductId(){
+        return productId;
     }
 
-    //Setter for cartItemId
-    public void setCartItemId(Integer cartItemId){
-        this.cartItemId = cartItemId;
+    //Setter for productId
+    public void setProductId(Integer productId){
+        this.productId = productId;
     }
 
     //Getter for quantity

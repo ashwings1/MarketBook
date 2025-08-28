@@ -39,10 +39,10 @@ public class CartController {
         this.clearCartService = clearCartService;
     }
 
-    //Get Cart
-    @GetMapping("/cart/{userId}")
-    public ResponseEntity<CartDTO> getCart(@PathVariable Integer userId){
-        return getCartService.execute(userId);
+    //Get Cart 
+    @GetMapping("/cart")
+    public ResponseEntity<CartDTO> getCart(){
+        return getCartService.execute(null);
     }
 
     //Add to Cart
@@ -52,28 +52,28 @@ public class CartController {
     }
 
     //Update Cart
-    @PutMapping("/cart/item/{cartItemId}")
-    public ResponseEntity<CartItemDTO> updateCart(@PathVariable Integer cartItemId, @RequestBody UpdateCartCommand command){
-        command.setCartItemId(cartItemId);
+    @PutMapping("/cart/{productId}")
+    public ResponseEntity<CartItemDTO> updateCart(@PathVariable Integer productId, @RequestBody UpdateCartCommand command){
+        command.setProductId(productId);
         return updateToCartService.execute(command);
     }
 
     //Delete from Cart
-    @DeleteMapping("/cart/item/{cartItemId}")
-    public ResponseEntity<Void> deleteFromCart(@PathVariable Integer cartItemId){
-        return deleteCartService.execute(cartItemId);
+    @DeleteMapping("/cart/{productId}")
+    public ResponseEntity<Void> deleteFromCart(@PathVariable Integer productId){
+        return deleteCartService.execute(productId);
     }
 
-    //Get Cart Total
-    @GetMapping("/cart/{userId}/summary")
-    public ResponseEntity<CartSummaryDTO> getCartTotal(@PathVariable Integer userId){
-        return getCartTotalService.execute(userId);
+    //Get Cart Total 
+    @GetMapping("/cart/summary")
+    public ResponseEntity<CartSummaryDTO> getCartTotal(){
+        return getCartTotalService.execute(null);
     }
 
-    //Clear Cart
-    @DeleteMapping("/cart/{userId}/clear")
-    public ResponseEntity<Void> clearCart(@PathVariable Integer userId){
-        return clearCartService.execute(userId);
+    //Clear Cart 
+    @DeleteMapping("/cart/clear")
+    public ResponseEntity<Void> clearCart(){
+        return clearCartService.execute(null);
     }
     
 }

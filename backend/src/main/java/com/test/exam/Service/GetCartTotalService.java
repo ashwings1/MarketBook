@@ -19,15 +19,18 @@ public class GetCartTotalService implements Command<Integer, CartSummaryDTO>{
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
+    private final UserContextService userContextService;
 
-    public GetCartTotalService(CartRepository cartRepository, CartItemRepository cartItemRepository, ProductRepository productRepository){
+    public GetCartTotalService(CartRepository cartRepository, CartItemRepository cartItemRepository, ProductRepository productRepository, UserContextService userContextService){
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
         this.productRepository = productRepository;
+        this.userContextService = userContextService;
     }
 
     @Override
     public ResponseEntity<CartSummaryDTO> execute(Integer userId){
+        userId = userContextService.getCurrentUserId();
         Cart cart = cartRepository.findByUserId(userId);
         if (cart == null){
             return ResponseEntity.ok(new CartSummaryDTO(0, 0.0, 0));

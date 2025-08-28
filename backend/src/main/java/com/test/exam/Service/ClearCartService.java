@@ -3,9 +3,9 @@ package com.test.exam.Service;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.test.exam.Command;
-import com.test.exam.Exception.UnauthorizedException;
 import com.test.exam.Model.Cart;
 import com.test.exam.Model.CartItemRepository;
 import com.test.exam.Model.CartRepository;
@@ -23,14 +23,11 @@ public class ClearCartService implements Command<Integer, Void> {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<Void> execute(Integer userId){
         Integer currentUserId = userContextService.getCurrentUserId();
 
-        if (!currentUserId.equals(userId)) {
-            throw new UnauthorizedException("You can only clear your own cart");
-        }
-
-        Cart cart = cartRepository.findByUserId(userId);
+        Cart cart = cartRepository.findByUserId(currentUserId);
 
         if (cart == null) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

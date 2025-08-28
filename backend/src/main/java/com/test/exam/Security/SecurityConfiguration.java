@@ -93,6 +93,7 @@ public class SecurityConfiguration {
                         authorize.requestMatchers("/product/**").hasRole("SELLER");
                         authorize.requestMatchers("/products/seller/**").hasRole("SELLER");
                         authorize.requestMatchers("/products/**");
+                        authorize.requestMatchers("/cart/**").hasRole("BUYER");
 
                         authorize.requestMatchers(HttpMethod.POST, "/track-metric").permitAll();
 

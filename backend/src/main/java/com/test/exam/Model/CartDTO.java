@@ -1,12 +1,14 @@
 package com.test.exam.Model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class CartDTO {
     private Integer id;
     private Integer userId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private List<CartItemDTO> items;
 
     public CartDTO(){}
 
@@ -55,6 +57,16 @@ public class CartDTO {
     //Setter for updated_at
     public void setUpdatedAt(LocalDateTime updatedAt){
         this.updatedAt = updatedAt;
+    }
+
+    //Getter for items
+    public List<CartItemDTO> getItems(){
+        return items;
+    }
+
+    //Setter for items
+    public void setItems(List<CartItemDTO> items){
+        this.items = items;
     }
     
 }

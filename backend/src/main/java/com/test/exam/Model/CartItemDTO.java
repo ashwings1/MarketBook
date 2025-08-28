@@ -5,6 +5,8 @@ public class CartItemDTO {
     private Integer cartId;
     private Integer productId;
     private Integer quantity;
+    private String productName;
+    private Double productPrice;
 
     public CartItemDTO(){}
 
@@ -53,6 +55,26 @@ public class CartItemDTO {
     //Setter for Quantity
     public void setQuantity(Integer quantity){
         this.quantity = quantity;
+    }
+
+    //Getter for ProductName
+    public String getProductName(){
+        return productName;
+    }
+
+    //Setter for ProductName
+    public void setProductName(String productName){
+        this.productName = productName;
+    }
+
+    //Getter for ProductPrice
+    public Double getProductPrice(){
+        return productPrice;
+    }
+
+    //Setter for ProductPrice
+    public void setProductPrice(Double productPrice){
+        this.productPrice = productPrice;
     }
 
 }

@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import com.test.exam.Command;
 import com.test.exam.Exception.ResourceNotFoundException;
-import com.test.exam.Exception.UnauthorizedException;
 import com.test.exam.Model.Cart;
 import com.test.exam.Model.CartItem;
 import com.test.exam.Model.CartItemDTO;
@@ -30,12 +29,13 @@ public class UpdateToCartService implements Command<UpdateCartCommand, CartItemD
     public ResponseEntity<CartItemDTO> execute(UpdateCartCommand command){
         Integer userId = userContextService.getCurrentUserId();
 
-        CartItem cartItem = cartItemRepository.findById(command.getCartItemId()).orElseThrow(() -> new ResourceNotFoundException("Cart item not found"));
-
         Cart cart = cartRepository.findByUserId(userId);
-        if (cart == null || !cart.getId().equals(cartItem.getCartId())){
-            throw new UnauthorizedException("Cart item does not belong to you");
+        if (cart == null) {
+            throw new ResourceNotFoundException("Cart not found for user");
         }
+
+        CartItem cartItem = cartItemRepository.findByCartIdAndProductId(cart.getId(), command.getProductId())
+            .orElseThrow(() -> new ResourceNotFoundException("Product not found in cart"));
 
         cartItem.setQuantity(command.getQuantity());
 
