@@ -10,6 +10,7 @@ import ProductDetail from './ProductDetail';
 import { AuthProvider, useAuth } from './AuthContext';
 import { ProtectedRoute } from './ProtectedRoute';
 import { trackRequest } from './Metrics';
+import { CartProvider } from './CartContext';
 
 function Home() {
   const { isAuthenticated, logout } = useAuth();
@@ -27,6 +28,10 @@ function Home() {
           <>
             <Link to="/account" style={{ marginRight: '20px' }}>Account</Link>
             <Link to="/products" style={{ marginRight: '40px' }}>Products</Link>
+            <div style={{ display: 'inline-flex', alignItems: 'center', marginRight: '20px' }}>
+              <CartIcon />
+              <span style={{ marginLeft: '8px', fontSize: '14px' }}>Cart</span>
+            </div>
             <button
               onClick={logout}
               style={{
@@ -62,62 +67,72 @@ function App() {
 
   return (
     <AuthProvider>
-      <Router>
-        <div className="App">
-          <Routes>
-            <Route
-              path="/"
-              element={<Home />}
-            />
-            <Route
-              path="/login"
-              element={
-                <div>
-                  <h1>Login Page</h1>
-                  <LoginForm trackRequest={trackRequest} />
-                  <Link to="/">Back to Home</Link>
-                </div>
-              }
-            />
-            <Route
-              path="/products"
-              element={<ProductsGrid />}
-            />
-            <Route
-              path="/products/:id"
-              element={<ProductDetail />}
-            />
-            <Route
-              path="/reset-password"
-              element={
-                <div>
-                  <h1>Reset Password</h1>
-                  <ResetPassword />
-                  <Link to="/">Back to Home</Link>
-                </div>
-              }
-            />
-            <Route
-              path="/register"
-              element={
-                <div>
-                  <h1>Register</h1>
-                  <RegisterUser />
-                  <Link to="/">Back to Home</Link>
-                </div>
-              }
-            />
-            <Route
-              path="/account"
-              element={
-                <ProtectedRoute>
-                  <Account />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </div>
-      </Router>
+      <CartProvider>
+        <Router>
+          <div className="App">
+            <Routes>
+              <Route
+                path="/"
+                element={<Home />}
+              />
+              <Route
+                path="/login"
+                element={
+                  <div>
+                    <h1>Login Page</h1>
+                    <LoginForm trackRequest={trackRequest} />
+                    <Link to="/">Back to Home</Link>
+                  </div>
+                }
+              />
+              <Route
+                path="/products"
+                element={<ProductsGrid />}
+              />
+              <Route
+                path="/products/:id"
+                element={<ProductDetail />}
+              />
+              <Route
+                path="/cart"
+                element={
+                  <ProtectedRoute>
+                    <ShoppingCart />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/reset-password"
+                element={
+                  <div>
+                    <h1>Reset Password</h1>
+                    <ResetPassword />
+                    <Link to="/">Back to Home</Link>
+                  </div>
+                }
+              />
+              <Route
+                path="/register"
+                element={
+                  <div>
+                    <h1>Register</h1>
+                    <RegisterUser />
+                    <Link to="/">Back to Home</Link>
+                  </div>
+                }
+              />
+              <Route
+                path="/account"
+                element={
+                  <ProtectedRoute>
+                    <Account />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </div>
+        </Router>
+      </CartProvider>
     </AuthProvider>
   );
 }
